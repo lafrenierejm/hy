@@ -1,12 +1,14 @@
 import os
 import sys
-from hy.completer import completion
+
 import pytest
+
+from hy.completer import completion
 
 
 @pytest.mark.skipif(
-    "readline" not in sys.modules,
-    reason="Module 'readline' is not available.")
+    "readline" not in sys.modules, reason="Module 'readline' is not available."
+)
 def test_history_custom_location(tmp_path):
     import readline
 
