@@ -1,0 +1,68 @@
+[tool.poetry]
+name = "hy"
+version = "0.1.0"
+description = "Hy is a Lisp dialect that’s embedded in Python. Since Hy transforms its Lisp code into Python abstract syntax tree (AST) objects, you have the whole beautiful world of Python at your fingertips, in Lisp form."
+authors = ["Paul Tagliamonte <tag@pault.ag>"]
+license = "MIT" # Expat
+repository = "https://github.com/hylang/hy"
+readme = "README.md"
+homepage = "https://hylang.org"
+documentation = "https://docs.hylang.org/en/stable/"
+include = ["hy/**/*.py", "hy/**/*.hy"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Lisp",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Software Development :: Code Generators",
+  "Topic :: Software Development :: Compilers",
+  "Topic :: Software Development :: Libraries",
+]
+
+[tool.poetry.scripts]
+hy = "hy.cmdline:hy_main"
+hy3 = "hy.cmdline:hy_main"
+hyc = "hy.cmdline:hyc_main"
+hyc3 = "hy.cmdline:hyc_main"
+hy2py = "hy.cmdline:hy2py_main"
+hy2py3 = "hy.cmdline:hy2py_main"
+
+[tool.poetry.dependencies]
+python = ">=3.7,<3.11"
+rply = ">=0.7.7"
+funcparserlib = ">=1.0.0a0"
+colorama = "^0.4.4"
+astor = {version = "^0.8.1", python = "<3.9"}
+
+[tool.poetry.dev-dependencies]
+black = "^22.1.0"
+isort = "^5.10.1"
+Pygments = "^2.11.2"
+Sphinx = "^4.4.0"
+sphinx-rtd-theme = "^1.0.0"
+# sphinxcontrib-hydomain = {git = "https://github.com/hylang/sphinxcontrib-hydomain.git"}
+pytest = "^6.2.5"
+
+[tool.isort]
+line_length = 88
+profile = "black"
+skip_gitignore = true
+src_paths = ["hy", "tests"]
+
+[tool.pytest.ini_options]
+python_functions = ["test_*", "is_test_*", "hyx_test_*", "hyx_is_test_*"]
+filterwarnings = [
+  "once::DeprecationWarning",
+  "once::PendingDeprecationWarning",
+  "ignore::SyntaxWarning",
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
