@@ -37,7 +37,7 @@ jobs:
         python-version: ${{ matrix.python }}
     - run: |
         pip install poetry
-        poetry export > requirements.txt
+        poetry export --dev > requirements.txt
         poetry build
     # We want to be sure we're testing the installed version,
     # instead of running from the source tree.
