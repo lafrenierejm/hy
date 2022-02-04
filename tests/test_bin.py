@@ -2,6 +2,7 @@
 # fmt: off
 
 import builtins
+import logging
 import os
 import re
 import shlex
@@ -9,6 +10,8 @@ import subprocess
 from importlib.util import cache_from_source
 
 import pytest
+
+__LOGGER__ = logging.getLogger(__name__)
 
 
 def pyr(s=""):
@@ -32,9 +35,16 @@ def run_cmd(cmd, stdin_data=None, expect=0, dontwritebytecode=False):
         shell=False,
         env=env,
     )
-    output = p.communicate(input=stdin_data)
-    assert p.wait() == expect
-    return output
+    outs, errs = p.communicate(input=stdin_data)
+    try:
+        assert p.wait() == expect
+    except Exception:
+        __LOGGER__.error("cmd parsed: %s", cmd_split)
+        __LOGGER__.error("stdout: %s", outs)
+        __LOGGER__.error("stderr: %s", errs)
+        raise
+
+    return outs, errs
 
 def rm(fpath):
     try:
