@@ -562,7 +562,7 @@ def cmdline_handler(scriptname, argv):
     def err(fmt, *args):
         raise HyArgError("hy: " + fmt.format(*args))
 
-    def proc_opt(opt, arg=None, item=None, i=None):
+    def proc_opt(opt, arg=None, item=None, i=None) -> bool:
         matches = [o for o in defs if opt in o["name"]]
         if not matches:
             err("unrecognized option: {}", opt)

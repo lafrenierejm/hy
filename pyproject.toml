@@ -36,9 +36,9 @@ hy2py3 = "hy.cmdline:hy2py_main"
 [tool.poetry.dependencies]
 python = ">=3.7,<3.11"
 rply = ">=0.7.7"
-funcparserlib = ">=1.0.0a0"
 colorama = "^0.4.4"
 astor = {version = "^0.8.1", python = "<3.9"}
+funcparserlib = {git = "https://github.com/lafrenierejm/funcparserlib.git", rev = "poetry-core"}
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
