@@ -14,6 +14,7 @@ import time
 import traceback
 import types
 from contextlib import contextmanager
+from platform import system
 
 import hy
 from hy.compiler import HyASTCompiler, hy_ast_compile_flags, hy_compile, hy_eval
@@ -561,7 +562,7 @@ def cmdline_handler(scriptname, argv):
     def err(fmt, *args):
         raise HyArgError("hy: " + fmt.format(*args))
 
-    def proc_opt(opt, arg=None, item=None, i=None):
+    def proc_opt(opt, arg=None, item=None, i=None) -> bool:
         matches = [o for o in defs if opt in o["name"]]
         if not matches:
             err("unrecognized option: {}", opt)
@@ -638,7 +639,11 @@ def cmdline_handler(scriptname, argv):
     if "mod" in options:
         set_path("")
         sys.argv = [program] + argv
-        runpy.run_module(options["mod"], run_name="__main__", alter_sys=True)
+        runpy.run_module(
+            options["mod"],
+            run_name=None,
+            alter_sys=True,
+        )
         return 0
 
     if "icommand" in options:
@@ -661,7 +666,10 @@ def cmdline_handler(scriptname, argv):
             try:
                 sys.argv = argv
                 with filtered_hy_exceptions():
-                    runhy.run_path(filename, run_name="__main__")
+                    runhy.run_path(
+                        filename,
+                        run_name=None,
+                    )
                 return 0
             except FileNotFoundError as e:
                 print(

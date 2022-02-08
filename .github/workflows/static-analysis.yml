@@ -15,6 +15,9 @@ jobs:
     - uses: actions/setup-python@v2
       with:
         python-version: '3.10'
-    - run: pip install -r requirements-dev.txt
-    - run: isort --check --diff hy tests
-    - run: black --check --diff hy tests
+    - run: |
+        pip install poetry
+        poetry config virtualenvs.in-project true
+        poetry install --no-root
+    - run: poetry run isort --check --diff hy tests
+    - run: poetry run black --check --diff hy tests

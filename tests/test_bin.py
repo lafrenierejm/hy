@@ -2,6 +2,7 @@
 # fmt: off
 
 import builtins
+import logging
 import os
 import re
 import shlex
@@ -10,8 +11,7 @@ from importlib.util import cache_from_source
 
 import pytest
 
-
-hy_dir = os.environ.get("HY_DIR", "")
+__LOGGER__ = logging.getLogger(__name__)
 
 
 def pyr(s=""):
@@ -25,10 +25,9 @@ def run_cmd(cmd, stdin_data=None, expect=0, dontwritebytecode=False):
     else:
         env.pop("PYTHONDONTWRITEBYTECODE", None)
 
-    cmd = shlex.split(cmd)
-    cmd[0] = os.path.join(hy_dir, cmd[0])
+    cmd_split = shlex.split(cmd)
     p = subprocess.Popen(
-        cmd,
+        cmd_split,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -36,9 +35,16 @@ def run_cmd(cmd, stdin_data=None, expect=0, dontwritebytecode=False):
         shell=False,
         env=env,
     )
-    output = p.communicate(input=stdin_data)
-    assert p.wait() == expect
-    return output
+    outs, errs = p.communicate(input=stdin_data)
+    try:
+        assert p.wait() == expect
+    except Exception:
+        __LOGGER__.error("cmd parsed: %s", cmd_split)
+        __LOGGER__.error("stdout: %s", outs)
+        __LOGGER__.error("stderr: %s", errs)
+        raise
+
+    return outs, errs
 
 def rm(fpath):
     try:
